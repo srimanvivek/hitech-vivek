@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dedicated to My Favourite Troublemaker</title>
+    <style>
+        /* --- DESIGN SYSTEM & CSS VARIABLES --- */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #ffe5ec 0%, #f0e6ff 40%, #e8f0fe 70%, #e3fafc 100%);
+            --glass-bg: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(142, 107, 185, 0.15);
+            --text-main: #4a3e56;
+            --text-muted: #6c5a80;
+            --accent-pink: #ff758f;
+            --accent-purple: #9c88ff;
+            --accent-blue: #74b9ff;
+            --glow-strong: 0 0 20px rgba(255, 117, 143, 0.4);
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- GLOBAL STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-family: var(--font-family);
+            color: var(--text-main);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        body {
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- PERSISTENT FLOATING ELEMENTS BACKGROUND --- */
+        #ambient-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            animation: floatUp 12s linear infinite;
+            will-change: transform, opacity;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(105vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% {
+                transform: translateY(-10vh) translateX(50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* --- PREMIUM GLASSMORPHISM MIXIN STYLES --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+
+        /* --- LAYOUT & UTILITIES --- */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            background: linear-gradient(45deg, var(--accent-pink), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        /* --- MUSIC UTILITY --- */
+        .music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: var(--glass-shadow);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            border: 1px solid var(--glass-border);
+        }
+        .music-toggle:active { transform: scale(0.9); }
+
+        /* --- SECTION 1: HERO --- */
+        #hero {
+            padding-top: 80px;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            animation: pulseGlow 3s ease-in-out infinite alternate;
+        }
+        .hero-sub {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            padding: 0 10px;
+            font-weight: 500;
+        }
+        .cta-btn {
+            padding: 16px 36px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(45deg, var(--accent-pink), var(--accent-purple));
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 117, 143, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 117, 143, 0.6);
+        }
+        .cta-btn:active { transform: translateY(1px); }
+
+        /* --- SECTION 2: TALK ABOUT --- */
+        .cards-grid {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .talk-card {
+            padding: 24px;
+            text-align: left;
+        }
+        .talk-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--accent-pink);
+            box-shadow: var(--glow-strong);
+        }
+        .talk-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .talk-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* --- SECTION 3: OFFICIAL FACTS --- */
+        .facts-container {
+            width: 100%;
+            padding: 25px;
+        }
+        .progress-wrapper {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            width: 0;
+            transition: width 1.5s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+        .notice-board {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .notice-tag {
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-left: 4px solid var(--accent-purple);
+            text-align: left;
+        }
+
+        /* --- SECTION 4: POLAROID GALLERY --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+        }
+        .gallery-grid :nth-child(odd) { transform: rotate(-3deg); }
+        .gallery-grid :nth-child(even) { transform: rotate(3deg); }
+        
+        .polaroid {
+            background: white;
+            padding: 10px 10px 24px 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .polaroid:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+            box-shadow: 0 12px 30px rgba(142, 107, 185, 0.25);
+            z-index: 10;
+        }
+        .polaroid-img-frame {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #eee;
+            overflow: hidden;
+            border-radius: 2px;
+            margin-bottom: 12px;
+        }
+        .polaroid-img-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .polaroid-caption {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+            font-family: sans-serif;
+        }
+
+        /* LIGHTBOX SYSTEM */
+        #lightbox {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        #lightbox.active { display: flex; opacity: 1; }
+        #lightbox img { max-width: 90%; max-height: 80%; border-radius: 8px; box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
+
+        /* --- SECTION 5: VIDEO MEMORIES --- */
+        .video-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .video-card {
+            padding: 14px;
+            width: 100%;
+        }
+        .video-card video {
+            width: 100%;
+            border-radius: 14px;
+            display: block;
+            background: #000;
+        }
+
+        /* --- SECTION 6: APPRECIATION NOTES --- */
+        .sticky-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+        }
+        .sticky-note {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: var(--glass-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+
+        /* --- SECTION 7: CRITICAL ISSUE --- */
+        .matter-card {
+            width: 100%;
+            padding: 30px 20px;
+        }
+        .text-seq {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            min-height: 35px;
+            transition: all 0.5s ease;
+        }
+        .countdown-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-pink);
+            margin: 20px 0;
+            font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 10px rgba(255, 117, 143, 0.2);
+        }
+        #treat-center {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            margin-top: 20px;
+        }
+        .qr-frame {
+            width: 180px;
+            height: 180px;
+            background: white;
+            margin: 20px auto;
+            padding: 10px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+        .qr-frame img { width: 100%; height: 100%; object-fit: contain; }
+
+        /* --- SECTION 8: DECISION GAME --- */
+        .game-card {
+            width: 100%;
+            padding: 35px 20px;
+            min-height: 280px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .game-card h3 { font-size: 1.35rem; margin-bottom: 30px; padding: 0 10px; }
+        .game-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            min-height: 60px;
+        }
+        .game-btn {
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease, font-size 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .yes-btn {
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            z-index: 5;
+        }
+        .no-btn {
+            background: #ef4444;
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+            position: relative;
+            white-space: nowrap;
+            z-index: 4;
+        }
+        #success-card {
+            display: none;
+            width: 100%;
+            padding: 25px;
+            margin-top: 20px;
+            border-color: #10b981;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* --- SECTION 9: FINAL MESSAGE --- */
+        .final-card {
+            width: 100%;
+            padding: 35px 25px;
+        }
+        .final-card p { font-size: 1.1rem; margin-bottom: 12px; font-weight: 500; }
+        .certificate-badge {
+            margin-top: 35px;
+            padding: 25px;
+            background: linear-gradient(135deg, #fff3bf 0%, #ffec99 100%);
+            border: 3px dashed #fcc419;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(252, 196, 25, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .certificate-badge:hover {
+            transform: scale(1.04);
+            box-shadow: 0 12px 30px rgba(252, 196, 25, 0.35);
+        }
+        .certificate-badge h4 { font-size: 1.4rem; color: #e67e22; margin-bottom: 5px; }
+        .certificate-badge p { font-size: 0.9rem; color: #d35400; margin: 0; font-weight: bold; }
+
+        /* --- CANVAS INTERACTION STYLES --- */
+        #confetti-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 3000;
+        }
+
+        /* --- GLOBAL ANIMATIONS --- */
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 10px rgba(255, 117, 143, 0.1); }
+            100% { text-shadow: 0 0 25px rgba(255, 117, 143, 0.45); }
+        }
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" src="music.mp3" loop></audio>
+    <button class="music-toggle" id="music-btn" onclick="toggleMusic()" aria-label="Toggle Music">🎵</button>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <div id="ambient-container"></div>
+
+    <section id="hero">
+        <h1 class="hero-title">Hey Didi 👋</h1>
+        <p class="hero-sub">I made something for you because apparently being talented, beautiful and annoying at the same time deserves recognition.</p>
+        <button class="cta-btn" onclick="scrollToNext('talk')">See Why ↓</button>
+    </section>
+
+    <section id="talk" class="scroll-reveal">
+        <h2 class="section-title">Things We Need To Talk About</h2>
+        <div class="cards-grid">
+            <div class="glass-card talk-card">
+                <h3>🌟 Too Talented</h3>
+                <p>"At this point it's getting suspicious."</p>
+            </div>
+            <div class="glass-card talk-card">
+                <h3>✨ Too Smart</h3>
+                <p>"Kindly stop making the rest of us look bad."</p>
+            </div>
+            <div class="glass-card talk-card">
+                <h3>🎨 Good At Almost Everything</h3>
+                <p>"Leave some achievements for normal people."</p>
+            </div>
+            <div class="glass-card talk-card">
+                <h3>📸 Looks Good In Every Picture</h3>
+                <p>"Scientists remain confused."</p>
+            </div>
+            <div class="glass-card talk-card">
+                <h3>💸 Still Hasn't Sponsored Enough Treats</h3>
+                <p>"Ongoing investigation."</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="facts" class="scroll-reveal">
+        <h2 class="section-title">Official Facts About You</h2>
+        <div class="glass-card facts-container">
+            <div class="progress-wrapper">
+                <div class="progress-label"><span>Talent</span><span>100%</span></div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" style="background: var(--accent-pink);" data-width="100%"></div></div>
+            </div>
+            <div class="progress-wrapper">
+                <div class="progress-label"><span>Beauty</span><span>100%</span></div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" style="background: var(--accent-purple);" data-width="100%"></div></div>
+            </div>
+            <div class="progress-wrapper">
+                <div class="progress-label"><span>Patience</span><span>95%</span></div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" style="background: var(--accent-blue);" data-width="95%"></div></div>
+            </div>
+            <div class="progress-wrapper">
+                <div class="progress-label"><span>Treat Giving Skills</span><span id="loading-txt">Loading...</span></div>
+                <div class="progress-bar-bg"><div class="progress-bar-fill" style="background: #10b981;" data-width="8%"></div></div>
+            </div>
+
+            <div class="notice-board">
+                <div class="notice-tag">🔬 Scientists are still investigating.</div>
+                <div class="notice-tag">📊 Data unavailable.</div>
+                <div class="notice-tag">🍿 Please contribute snacks for further research.</div>
+                <div class="notice-tag">⚠️ Error 404: Sibling Treat Not Found.</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="scroll-reveal">
+        <h2 class="section-title">Memory Gallery</h2>
+        <div class="gallery-grid">
+            <div class="polaroid" onclick="openLightbox('photo1.jpg')">
+                <div class="polaroid-img-frame"><img src="photo1.jpg" alt="Memory One" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100%\' height=\'100%\' fill=\'%23f3e8ff\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'10\' fill=\'%23a855f7\'>Photo 1 Placeholder</text></svg>'"></div>
+                <div class="polaroid-caption">Best Dynamic Duo ✨</div>
+            </div>
+            <div class="polaroid" onclick="openLightbox('photo2.jpg')">
+                <div class="polaroid-img-frame"><img src="photo2.jpg" alt="Memory Two" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100%\' height=\'100%\' fill=\'%23fce7f3\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'10\' fill=\'%23ec4899\'>Photo 2 Placeholder</text></svg>'"></div>
+                <div class="polaroid-caption">Stole my food here 🥞</div>
+            </div>
+            <div class="polaroid" onclick="openLightbox('photo3.jpg')">
+                <div class="polaroid-img-frame"><img src="photo3.jpg" alt="Memory Three" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100%\' height=\'100%\' fill=\'%23e0f2fe\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'10\' fill=\'%230284c7\'>Photo 3 Placeholder</text></svg>'"></div>
+                <div class="polaroid-caption">Exquisite Pose 👑</div>
+            </div>
+            <div class="polaroid" onclick="openLightbox('photo4.jpg')">
+                <div class="polaroid-img-frame"><img src="photo4.jpg" alt="Memory Four" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100%\' height=\'100%\' fill=\'%23ecfdf5\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'10\' fill=\'%23059669\'>Photo 4 Placeholder</text></svg>'"></div>
+                <div class="polaroid-caption">Total Troublemaker Mood 😂</div>
+            </div>
+            <div class="polaroid" onclick="openLightbox('photo5.jpg')" style="grid-column: span 2; max-width: 70%; margin: 0 auto; transform: rotate(-1deg);">
+                <div class="polaroid-img-frame"><img src="photo5.jpg" alt="Memory Five" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'><rect width=\'100%\' height=\'100%\' fill=\'%23fff7ed\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' font-size=\'10\' fill=\'%23ea580c\'>Photo 5 Placeholder</text></svg>'"></div>
+                <div class="polaroid-caption">Favorite Memory Framework 🎯</div>
+            </div>
+        </div>
+    </section>
+
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="Enlarged View">
+    </div>
+
+    <section id="videos" class="scroll-reveal">
+        <h2 class="section-title">Video Memories</h2>
+        <div class="video-wrapper">
+            <div class="glass-card video-card">
+                <video src="video1.mp4" controls preload="metadata"></video>
+            </div>
+            <div class="glass-card video-card">
+                <video src="video2.mp4" controls preload="metadata"></video>
+            </div>
+        </div>
+    </section>
+
+    <section id="appreciation" class="scroll-reveal">
+        <h2 class="section-title">Appreciation Notes</h2>
+        <div class="sticky-container">
+            <div class="sticky-note">"You always support people."</div>
+            <div class="sticky-note">"You work hard."</div>
+            <div class="sticky-note">"You make life less boring."</div>
+            <div class="sticky-note">"You somehow manage everything."</div>
+            <div class="sticky-note">"You deserve more appreciation than you get."</div>
+            <div class="sticky-note">"You make family moments better."</div>
+            <div class="sticky-note">"You're stronger than you think."</div>
+            <div class="sticky-note">"You've helped more people than you realize."</div>
+        </div>
+    </section>
+
+    <section id="matter" class="scroll-reveal">
+        <h2 class="section-title">The Very Important Matter</h2>
+        <div class="glass-card matter-card">
+            <div id="sequence-text" class="text-seq">Now that we've established you're awesome...</div>
+            <div id="countdown" class="countdown-display">00:05</div>
+            
+            <div id="treat-center">
+                <h3>💸 Treat Fund Collection Center 💸</h3>
+                <p style="font-size: 0.95rem; margin-top: 10px; color: var(--text-muted);">Since we're far away, modern problems require modern solutions.</p>
+                <div class="qr-frame">
+                    <img src="qr.png" alt="Payment QR Code" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'150\' height=\'150\' viewBox=\'0 0 150 150\'><rect width=\'100%\' height=\'100%\' fill=\'%23eee\'/><path d=\'M10 10h30v30h-30zM110 10h30v30h-30zM10 110h30v30h-30z\' fill=\'%23333\'/><path d=\'M50 50h50v50h-50z\' fill=\'%2374b9ff\'/></svg>'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="game" class="scroll-reveal">
+        <div class="glass-card game-card" id="game-main-box">
+            <div id="game-question-area">
+                <h3 id="game-heading">Will you officially sponsor your favourite younger brother's treat?</h3>
+                <div class="game-actions" id="button-container">
+                    <button class="game-btn yes-btn" id="btn-yes" onclick="selectYesAnswer()">🥳 Yes Of Course</button>
+                    <button class="game-btn no-btn" id="btn-no" onclick="handleNoInteraction(event)" onmouseover="handleNoInteraction(event)">🙄 No</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass-card" id="success-card">
+            <h3 style="color: #059669; margin-bottom: 12px;">🏆 Correct Answer Selected!</h3>
+            <p style="font-size: 0.95rem; margin-bottom: 12px; font-weight: 600;">You are officially the most generous, most amazing, most talented, most beautiful and most legendary sister on this planet.</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; font-style: italic;">The Younger Brother Appreciation Department thanks you for your contribution.</p>
+            <p style="font-size: 0.9rem; font-weight: 700; border-top: 1px dashed rgba(0,0,0,0.1); padding-top: 12px;">Your reward: Unlimited respect, premium sibling status and occasional annoying phone calls.</p>
+        </div>
+    </section>
+
+    <section id="final" class="scroll-reveal">
+        <div class="glass-card final-card">
+            <p>Jokes aside...</p>
+            <p>You've always been one of my favourite people.</p>
+            <p>Thank you for everything.</p>
+            <p style="color: var(--accent-pink); font-weight: bold;">For the support.</p>
+            <p style="color: var(--accent-purple); font-weight: bold;">For the memories.</p>
+            <p style="color: var(--accent-blue); font-weight: bold;">For always being there.</p>
+            <p style="font-size: 0.95rem; margin-top: 20px;" class="text-muted">And yes, this website was definitely not made just for the treat.</p>
+            <p style="font-size: 0.9rem;">(Okay maybe a little.) 😂</p>
+            
+            <div class="certificate-badge" onclick="triggerCertificateCelebration()">
+                <h4>🏆 World's Best Sister</h4>
+                <p>(According To Me)</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        /* --- GLOBAL BACKGROUND DECORATIONS --- */
+        const ambientSymbols = ['💖', '✨', '🦋', '⭐', '🌸'];
+        const ambientContainer = document.getElementById('ambient-container');
+
+        function createAmbientParticles() {
+            const particleCount = window.innerWidth < 600 ? 15 : 30;
+            for (let i = 0; i < particleCount; i++) {
+                const span = document.createElement('span');
+                span.className = 'floating-element';
+                span.innerText = ambientSymbols[Math.floor(Math.random() * ambientSymbols.length)];
+                span.style.left = Math.random() * 100 + 'vw';
+                span.style.top = Math.random() * 100 + 'vh';
+                // Varied delays to prevent layout clumps
+                span.style.animationDelay = (Math.random() * -12) + 's'; 
+                span.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+                ambientContainer.appendChild(span);
+            }
+        }
+        createAmbientParticles();
+
+        /* --- AUDIO MANAGEMENT --- */
+        const bgMusic = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    musicBtn.innerText = '⏸️';
+                }).catch(err => console.log("Audio play prevented: ", err));
+            } else {
+                bgMusic.pause();
+                musicBtn.innerText = '🎵';
+            }
+        }
+
+        /* --- INTERSECTION OBSERVER FOR SCROLL ANIMATIONS --- */
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Special case: animate facts bar metrics when visible
+                    if (entry.target.id === 'facts') {
+                        animateProgressBars();
+                    }
+                }
+            });
+        }, { threshold: 0.15 });
+
+        revealElements.forEach(el => observer.observe(el));
+
+        function animateProgressBars() {
+            const fills = document.querySelectorAll('.progress-bar-fill');
+            fills.forEach(fill => {
+                fill.style.width = fill.getAttribute('data-width');
+            });
+        }
+
+        function scrollToNext(id) {
+            const element = document.getElementById(id);
+            if(element) element.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /* --- LIGHTBOX MANAGEMENT --- */
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+        }
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        /* --- SECTION 7 TEXT SEQUENCE & COUNTDOWN LOGIC --- */
+        const phrases = [
+            "Now that we've established you're awesome...",
+            "We need to discuss a critical issue.",
+            "I still haven't received my official sibling treat."
+        ];
+        let phraseIdx = 0;
+        const seqTextElem = document.getElementById('sequence-text');
+        const countdownElem = document.getElementById('countdown');
+        const treatCenterElem = document.getElementById('treat-center');
+
+        // Cycle text logic
+        setInterval(() => {
+            if (phraseIdx < phrases.length - 1) {
+                phraseIdx++;
+                seqTextElem.style.opacity = 0;
+                setTimeout(() => {
+                    seqTextElem.innerText = phrases[phraseIdx];
+                    seqTextElem.style.opacity = 1;
+                }, 400);
+            }
+        }, 3500);
+
+        // Countdown timer implementation
+        let count = 5;
+        const countdownTimer = setInterval(() => {
+            count--;
+            countdownElem.innerText = `00:0${count}`;
+            if (count <= 0) {
+                clearInterval(countdownTimer);
+                countdownElem.style.display = 'none';
+                treatCenterElem.style.display = 'block';
+                setTimeout(() => treatCenterElem.style.opacity = 1, 50);
+            }
+        }, 1000);
+
+        /* --- SECTION 8: MINI DECISION GAME SYSTEM --- */
+        let noClicks = 0;
+        const noBtn = document.getElementById('btn-no');
+        const yesBtn = document.getElementById('btn-yes');
+        const boxContainer = document.getElementById('button-container');
+
+        const noPhrases = {
+            2: "🤨 Are You Sure?",
+            4: "😑 Think Again",
+            6: "😂 Nice Try",
+            8: "🏃 Catch Me First"
+        };
+
+        function handleNoInteraction(e) {
+            e.preventDefault(); // Stifles mobile jumping metrics
+            noClicks++;
+
+            // Handle text conversion structural boundaries
+            if (noPhrases[noClicks]) {
+                noBtn.innerText = noPhrases[noClicks];
+            }
+
+            // Scale target alternative response structurally
+            const currentYesScale = 1 + (noClicks * 0.15);
+            yesBtn.style.transform = `scale(${currentYesScale})`;
+
+            // Structural bounding box limits for keeping the element fully interactive on device viewports
+            const containerWidth = boxContainer.clientWidth;
+            const containerHeight = boxContainer.clientHeight;
+            const btnWidth = noBtn.clientWidth;
+            const btnHeight = noBtn.clientHeight;
+
+            // Absolute delta distribution boundaries
+            const xRange = (containerWidth - btnWidth) / 2;
+            const yRange = 80; // Bounded internal height delta spectrum
+
+            const randomX = (Math.random() - 0.5) * xRange * 2;
+            const randomY = (Math.random() - 0.5) * yRange;
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `calc(50% - ${btnWidth/2}px + ${randomX}px)`;
+            noBtn.style.top = `calc(50% - ${btnHeight/2}px + ${randomY}px)`;
+        }
+
+        function selectYesAnswer() {
+            // Re-render display states
+            document.getElementById('game-question-area').style.display = 'none';
+            document.getElementById('success-card').style.display = 'block';
+            
+            // Re-append dynamic success metric transformations inside container structure
+            const newYesBtn = document.createElement('button');
+            newYesBtn.className = 'game-btn yes-btn';
+            newYesBtn.style.transform = 'none';
+            newYesBtn.innerText = '💖 Best Sister Ever';
+            document.getElementById('game-main-box').appendChild(newYesBtn);
+
+            // Execute programmatic celebration bursts
+            triggerConfettiExplosion();
+        }
+
+        function triggerCertificateCelebration() {
+            triggerConfettiExplosion();
+            const cert = document.querySelector('.certificate-badge');
+            cert.style.transform = 'scale(1.1)';
+            setTimeout(() => cert.style.transform = 'none', 300);
+        }
+
+        /* --- PROGRAMMATIC ENGINE: CANVAS CONFETTI & SPARKLES --- */
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let pieces = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class ConfettiPiece {
+            constructor(x, y, isSparkle = false) {
+                this.x = x;
+                this.y = y;
+                this.isSparkle = isSparkle;
+                this.size = isSparkle ? (Math.random() * 4 + 2) : (Math.random() * 8 + 6);
+                this.color = isSparkle ? '#fff' : ['#ff758f', '#9c88ff', '#74b9ff', '#fcc419', '#ff8787'][Math.floor(Math.random() * 5)];
+                this.speedX = (Math.random() - 0.5) * 8;
+                this.speedY = isSparkle ? (Math.random() - 0.5) * 6 : (Math.random() * -10 - 4);
+                this.gravity = isSparkle ? 0.02 : 0.25;
+                this.opacity = 1;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 10;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += this.gravity;
+                this.rotation += this.rotationSpeed;
+                this.opacity -= 0.015;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                if (this.isSparkle) {
+                    // Star/Sparkle drawing logic
+                    ctx.beginPath();
+                    for(let i=0; i<5; i++) {
+                        ctx.lineTo(0, 0 - this.size);
+                        ctx.rotate(Math.PI / 2.5);
+                        ctx.lineTo(0, 0 - (this.size/2));
+                        ctx.rotate(Math.PI / 2.5);
+                    }
+                    ctx.fill();
+                } else {
+                    ctx.rotate(this.rotation * Math.PI / 180);
+                    ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+                }
+                ctx.restore();
+            }
+        }
+
+        function triggerConfettiExplosion() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight * 0.6;
+            
+            // Standard Confetti
+            for (let i = 0; i < 100; i++) {
+                pieces.push(new ConfettiPiece(centerX, centerY, false));
+            }
+            // Sparkles
+            for (let i = 0; i < 60; i++) {
+                pieces.push(new ConfettiPiece(centerX, centerY, true));
+            }
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pieces.forEach((piece, index) => {
+                piece.update();
+                piece.draw();
+                if (piece.opacity <= 0) pieces.splice(index, 1);
+            });
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+    </script>
+</body>
+</html>
