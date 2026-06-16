@@ -385,7 +385,7 @@
         .game-card {
             width: 100%;
             padding: 35px 20px;
-            min-height: 280px;
+            min-height: 450px;
             position: relative;
             display: flex;
             flex-direction: column;
@@ -450,14 +450,20 @@
         left:120%;
     }
 }
-        .no-btn {
-            background: #ef4444;
-            color: white;
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
-            position: relative;
-            white-space: nowrap;
-            z-index: 4;
-        }
+      .no-btn{
+    background:#ef4444;
+    color:white;
+    box-shadow:0 4px 12px rgba(239,68,68,.2);
+
+    position:absolute;
+
+    transition:
+        left .35s ease,
+        top .35s ease,
+        transform .2s ease;
+
+    z-index:999;
+}
         #success-card {
             display: none;
             width: 100%;
@@ -832,47 +838,38 @@ const treatLevels = [
     "Best Didi Ever",
     "Treat Queen 👑"
 ];
-        function handleNoInteraction(e) {
-            e.preventDefault(); // Stifles mobile jumping metrics
-            noClicks++;
-if(noClicks < treatLevels.length){
-    document.getElementById("treat-level").innerText =
-    treatLevels[noClicks];
-}
+       function handleNoInteraction(e) {
 
-if(noClicks >= 5){
-    yesBtn.innerHTML =
-    `👑 BEST OPTION AVAILABLE
-    <span id="treat-level">99% Recommended</span>`;
-}
-            // Handle text conversion structural boundaries
-            if (noPhrases[noClicks]) {
-                noBtn.innerText = noPhrases[noClicks];
-            }
+    e.preventDefault();
+    noClicks++;
 
-            // Scale target alternative response structurally
-            const currentYesScale = 1 + (noClicks * 0.15);
-            yesBtn.style.transform = `scale(${currentYesScale})`;
+    // YES button grows
+    const currentYesScale = 1 + (noClicks * 0.15);
+    yesBtn.style.transform = `scale(${currentYesScale})`;
 
-            // Structural bounding box limits for keeping the element fully interactive on device viewports
-            const containerWidth = boxContainer.clientWidth;
-            const containerHeight = boxContainer.clientHeight;
-            const btnWidth = noBtn.clientWidth;
-            const btnHeight = noBtn.clientHeight;
+    // funny text changes
+    if(noClicks === 1) noBtn.innerText = "🤨 Sure?";
+    if(noClicks === 2) noBtn.innerText = "😏 Really?";
+    if(noClicks === 3) noBtn.innerText = "😂 Nice Try";
+    if(noClicks === 4) noBtn.innerText = "🏃 Catch Me";
+    if(noClicks >= 5) noBtn.innerText = "😭 Please No";
 
-            // Absolute delta distribution boundaries
-            const xRange = (containerWidth - btnWidth) / 2;
-            const yRange = 80; // Bounded internal height delta spectrum
+    const gameCard = document.getElementById("game-main-box");
 
-            const randomX = (Math.random() - 0.5) * xRange * 2;
-            const randomY = (Math.random() - 0.5) * yRange;
+    const cardWidth = gameCard.clientWidth;
+    const cardHeight = gameCard.clientHeight;
 
-            noBtn.style.position = 'absolute';
-            noBtn.style.left = `calc(50% - ${btnWidth/2}px + ${randomX}px)`;
-            noBtn.style.top = `calc(50% - ${btnHeight/2}px + ${randomY}px)`;
-        }
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
 
-       function selectYesAnswer(){
+    const randomX = Math.random() * (cardWidth - btnWidth - 20);
+    const randomY = Math.random() * (cardHeight - btnHeight - 20);
+
+    noBtn.style.position = "absolute";
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+
+}       function selectYesAnswer(){
 
     triggerConfettiExplosion();
 
